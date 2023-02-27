@@ -30,7 +30,7 @@ namespace app.Repository
 
     public void UpdateEmployee(EmployeesModel employee)
     {
-      throw new NotImplementedException();
+      _context.Update(employee);
     }
 
     public void DeleteEmployee(EmployeesModel employee)
