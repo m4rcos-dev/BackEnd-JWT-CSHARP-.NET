@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace app.Controllers
 {
   [ApiController]
-  [Route("/employess")]
+  [Route("/employees")]
   public class EmployeesController : ControllerBase
   {
     private readonly IEmployeesRepository _repository;
@@ -15,7 +15,7 @@ namespace app.Controllers
       _repository = repository;
     }
 
-    [HttpGet]
+    [HttpGet("getall")]
     public async Task<IActionResult> GetAll()
     {
       try
@@ -29,7 +29,7 @@ namespace app.Controllers
       }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("get/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
       try
@@ -44,7 +44,7 @@ namespace app.Controllers
       }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateEmployee(EmployeesModel employee)
     {
       try
@@ -63,7 +63,7 @@ namespace app.Controllers
       }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateEmployee(int id, EmployeesModel employee)
     {
       try
@@ -86,7 +86,7 @@ namespace app.Controllers
       }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteEmployee(int id)
     {
       try
