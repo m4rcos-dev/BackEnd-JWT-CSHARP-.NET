@@ -1,10 +1,12 @@
 
 using app.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace app.Data
 {
-  public class EmployeesContext : DbContext
+  public class EmployeesContext : IdentityDbContext
   {
     public EmployeesContext(DbContextOptions<EmployeesContext> options) : base(options) { }
 
@@ -12,8 +14,11 @@ namespace app.Data
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      base.OnModelCreating(modelBuilder);
+      
       var employess = modelBuilder.Entity<EmployeesModel>();
       employess.ToTable("tb_employess");
+      employess.HasKey(x => x.Id);
       employess.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
       employess.Property(x => x.Name).HasColumnName("name").IsRequired();
       employess.Property(x => x.Sector).HasColumnName("sector").IsRequired();
