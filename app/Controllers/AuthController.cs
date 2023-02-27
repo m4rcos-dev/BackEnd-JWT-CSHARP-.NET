@@ -1,3 +1,4 @@
+using app.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using static app.Models.AuthModel;
@@ -11,12 +12,15 @@ namespace app.Controllers
   {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly JwtGenerate _jwtGenerate;
 
     public AuthController(SignInManager<IdentityUser> signInManager,
-                            UserManager<IdentityUser> userManager)
+                            UserManager<IdentityUser> userManager,
+                            JwtGenerate jwtGenerate)
     {
       _signInManager = signInManager;
       _userManager = userManager;
+      _jwtGenerate = jwtGenerate;
     }
 
     [HttpPost("register")]
@@ -33,7 +37,7 @@ namespace app.Controllers
 
         await _userManager.CreateAsync(user, registerUser.Password);
 
-        return Ok();
+        return Ok(await _jwtGenerate.CreateJwt(registerUser.Email));
       }
       catch (Exception error)
       {
