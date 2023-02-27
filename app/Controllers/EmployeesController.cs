@@ -1,3 +1,4 @@
+using app.Models;
 using app.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +41,25 @@ namespace app.Controllers
       {
         var typeError = error.Data == null || error.Data.Count == 0;
         return typeError ? NotFound("Eemployee not found") : BadRequest(error.Message);
+      }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateEmployee(EmployeesModel employee)
+    {
+      try
+      {
+        if(employee.Name == null || employee.Name == "") throw new Exception("name field required");
+        if(employee.Sector == null || employee.Sector == "") throw new Exception("sector field required");
+        if(employee.Role == null || employee.Role == "") throw new Exception("role field required");
+
+        _repository.CreateEmployee(employee);
+        await _repository.SaveChangeAsync();
+        return Ok("Registered employee");
+      }
+      catch(Exception error)
+      {
+        return BadRequest(error.Message);
       }
     }
   }

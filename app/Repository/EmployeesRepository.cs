@@ -25,7 +25,7 @@ namespace app.Repository
 
     public void CreateEmployee(EmployeesModel employee)
     {
-      throw new NotImplementedException();
+      _context.Add(employee);
     }
 
     public void UpdateEmployee(EmployeesModel employee)
@@ -38,9 +38,9 @@ namespace app.Repository
       throw new NotImplementedException();
     }
 
-    public Task<bool> SaveChangeAsync()
+    public async Task<bool> SaveChangeAsync()
     {
-      throw new NotImplementedException();
+      return await _context.SaveChangesAsync() > 0;
     }
   }
 }
