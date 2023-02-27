@@ -1,5 +1,6 @@
 using app.Data;
 using app.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace app.Repository
 {
@@ -17,9 +18,9 @@ namespace app.Repository
       return Task.FromResult(_context.Employess.ToList());
     }
 
-        public Task<EmployeesModel> GetById()
+    public Task<EmployeesModel> GetById(int id)
     {
-      throw new NotImplementedException();
+      return _context.Employess.FirstAsync(x => x.Id == id);
     }
 
     public void CreateEmployee(EmployeesModel employee)

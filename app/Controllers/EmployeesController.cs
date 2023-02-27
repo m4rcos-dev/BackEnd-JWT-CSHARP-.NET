@@ -15,7 +15,7 @@ namespace app.Controllers
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAll()
     {
       try
       {
@@ -25,6 +25,21 @@ namespace app.Controllers
       catch(Exception error)
       {
         return BadRequest(error.Message);
+      }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+      try
+      {
+        var employee = await _repository.GetById(id);
+        return Ok(employee);
+      }
+      catch(Exception error)
+      {
+        var typeError = error.Data == null || error.Data.Count == 0;
+        return typeError ? NotFound("Eemployee not found") : BadRequest(error.Message);
       }
     }
   }
