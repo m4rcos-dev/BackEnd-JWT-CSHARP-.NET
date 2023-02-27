@@ -1,4 +1,5 @@
 using app.Data;
+using app.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<EmployeesContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("Default");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
+builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 
 var app = builder.Build();
 
