@@ -1,5 +1,6 @@
 using app.Data;
 using app.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,20 +12,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<EmployeesContext>(options => {
-    var connectionString = builder.Configuration.GetConnectionString("Default");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+builder.Services.AddDbContext<EmployeesContext>(options =>
+{
+  var connectionString = builder.Configuration.GetConnectionString("Default");
+  options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<EmployeesContext>()
+                .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
