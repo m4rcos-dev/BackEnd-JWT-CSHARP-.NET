@@ -85,5 +85,24 @@ namespace app.Controllers
         return typeError ? NotFound("Employee not found") : BadRequest(error.Message);
       }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteEmployee(int id)
+    {
+      try
+      {
+        var employeeDb = await _repository.GetById(id);
+
+        _repository.DeleteEmployee(employeeDb);
+        await _repository.SaveChangeAsync();
+
+        return Ok("Deleted employee");
+      }
+      catch(Exception error)
+      {
+        var typeError = error.Data == null || error.Data.Count == 0;
+        return typeError ? NotFound("Employee not found") : BadRequest(error.Message);
+      }
+    }
   }
 }

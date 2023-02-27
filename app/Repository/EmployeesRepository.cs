@@ -35,7 +35,7 @@ namespace app.Repository
 
     public void DeleteEmployee(EmployeesModel employee)
     {
-      throw new NotImplementedException();
+      _context.Remove(employee);
     }
 
     public async Task<bool> SaveChangeAsync()
