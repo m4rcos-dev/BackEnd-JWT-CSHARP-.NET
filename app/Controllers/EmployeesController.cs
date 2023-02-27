@@ -5,8 +5,7 @@ namespace app.Controllers
 {
   [ApiController]
   [Route("/employess")]
-  public class EmployeesController
-
+  public class EmployeesController : ControllerBase
   {
     private readonly IEmployeesRepository _repository;
 
@@ -14,12 +13,19 @@ namespace app.Controllers
     {
       _repository = repository;
     }
-    
-    [HttpGet]
 
-    public string Get()
+    [HttpGet]
+    public async Task<IActionResult> Get()
     {
-      return "Ok";
+      try
+      {
+        var employees = await _repository.GetAllEmployees();
+        return Ok(employees);
+      }
+      catch(Exception error)
+      {
+        return BadRequest(error.Message);
+      }
     }
   }
 }
