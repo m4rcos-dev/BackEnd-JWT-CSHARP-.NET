@@ -40,5 +40,19 @@ namespace app.Controllers
         return BadRequest(error.Message);
       }
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUser loginUser)
+    {
+        try
+        {
+            await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
+            return Ok("Login sucess");
+        }
+        catch(Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
   }
 }
