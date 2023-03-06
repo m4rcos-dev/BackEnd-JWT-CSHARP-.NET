@@ -13,9 +13,6 @@ namespace app.Models
       [Required(ErrorMessage = "The field {0} is required")]
       [StringLength(100, ErrorMessage = "The field {0} must be between {2} and {1}", MinimumLength = 4)]
       public string Password { get; set; }
-
-      [Compare("Password", ErrorMessage = "Passwords don't match")]
-      public string ConfirmPassword { get; set; }
     }
 
     public class LoginUser

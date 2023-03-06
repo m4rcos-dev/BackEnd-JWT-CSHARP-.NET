@@ -10,12 +10,12 @@ namespace app.Data
   {
     public EmployeesContext(DbContextOptions<EmployeesContext> options) : base(options) { }
 
-    public DbSet<EmployeesModel> Employess { get; set; }
+    public DbSet<EmployeesModel> Employees { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
-      
+
       var employess = modelBuilder.Entity<EmployeesModel>();
       employess.ToTable("tb_employess");
       employess.HasKey(x => x.Id);

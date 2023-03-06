@@ -1,5 +1,6 @@
 using app.Data;
 using app.Models;
+using app.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace app.Repository
@@ -13,34 +14,41 @@ namespace app.Repository
       _context = context;
     }
 
-    public Task<List<EmployeesModel>> GetAllEmployees()
+    public async Task<List<EmployeesModel>> GetAllEmployees()
     {
-      return Task.FromResult(_context.Employess.ToList());
+      return await _context.Employees.ToListAsync();
     }
 
-    public Task<EmployeesModel> GetById(int id)
+    public async Task<EmployeesModel> GetById(int id)
     {
-      return _context.Employess.FirstAsync(x => x.Id == id);
+      return await _context.Employees.FirstAsync(x => x.Id == id);
     }
 
-    public void CreateEmployee(EmployeesModel employee)
+    public async Task<EmployeesModel> CreateEmployee(EmployeesModel employee)
     {
-      _context.Add(employee);
+      _context.Employees.Add(employee);
+      await _context.SaveChangesAsync();
+
+      return employee;
     }
 
-    public void UpdateEmployee(EmployeesModel employee)
+    public async Task<EmployeesModel> UpdateEmployee(EmployeesModel employee)
     {
-      _context.Update(employee);
+      _context.Employees.Update(employee);
+      await _context.SaveChangesAsync();
+
+      return employee;
     }
 
-    public void DeleteEmployee(EmployeesModel employee)
+    public async Task<bool> DeleteEmployee(int id)
     {
-      _context.Remove(employee);
-    }
+      var employeeDb = await GetById(id);
 
-    public async Task<bool> SaveChangeAsync()
-    {
-      return await _context.SaveChangesAsync() > 0;
+      _context.Employees.Remove(employeeDb);
+      await _context.SaveChangesAsync();
+
+      return true;
     }
   }
 }
+

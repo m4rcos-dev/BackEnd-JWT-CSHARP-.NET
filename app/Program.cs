@@ -1,6 +1,8 @@
 using System.Text;
 using app.Data;
+using app.Interfaces;
 using app.Repository;
+using app.Services;
 using app.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +25,7 @@ builder.Services.AddDbContext<EmployeesContext>(options =>
 });
 
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<EmployeesContext>()
                 .AddDefaultTokenProviders();
