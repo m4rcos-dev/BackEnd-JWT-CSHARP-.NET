@@ -1,10 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using app.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using static app.Models.AuthModel;
 
 namespace app.Controllers
@@ -16,16 +12,15 @@ namespace app.Controllers
   {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly AppSettings _appSettings;
     private readonly JwtGenerate _jwtGenerate;
 
     public AuthController(SignInManager<IdentityUser> signInManager,
                             UserManager<IdentityUser> userManager,
-                            IOptions<AppSettings> appSettings)
+                            JwtGenerate jwtGenerate)
     {
       _signInManager = signInManager;
       _userManager = userManager;
-      _appSettings = appSettings.Value;
+      _jwtGenerate = jwtGenerate;
     }
 
     [HttpPost("register")]
@@ -42,7 +37,7 @@ namespace app.Controllers
 
         await _userManager.CreateAsync(user, registerUser.Password);
 
-        return Ok(await CreateJwt(registerUser.Email));
+        return Ok(await _jwtGenerate.CreateJwt(user.Email));
       }
       catch (Exception error)
       {
@@ -56,30 +51,12 @@ namespace app.Controllers
         try
         {
             await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
-            return Ok(await CreateJwt(loginUser.Email));
+            return Ok(await _jwtGenerate.CreateJwt(loginUser.Email));
         }
         catch(Exception error)
         {
             return BadRequest(error.Message);
         }
-    }
-
-    private async Task<string> CreateJwt(string email)
-    {
-        var user = await _userManager.FindByEmailAsync(email);
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-      {
-        Issuer = _appSettings.Emissor,
-        Audience = _appSettings.Valid,
-        Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationHours),
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-      };
-
-      return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
     }
   }
 }

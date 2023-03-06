@@ -26,6 +26,7 @@ builder.Services.AddDbContext<EmployeesContext>(options =>
 
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+builder.Services.AddScoped<JwtGenerate>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<EmployeesContext>()
                 .AddDefaultTokenProviders();
