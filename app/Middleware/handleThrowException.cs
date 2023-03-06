@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace app.Middleware
 {
   [ApiExplorerSettings(IgnoreApi = true)]
-  public class handleTrowException : Controller
+  public class handleThrowException : Controller
   {
     [Route("/error")]
     public IActionResult HandleError() =>
